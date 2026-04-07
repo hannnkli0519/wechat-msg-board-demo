@@ -6,6 +6,8 @@ Page({
     inputValue: '',
     showEmojiPicker: false,
     messages: [],
+    selectedImage: null, // 当前选中的图片
+    scrollToView: '', // 滚动到指定位置
     availableAvatars: [
       '😀', '😁', '😎', '😍', '😇', '👋',
       '🐱', '🐶', '🦊', '🐼', '🐻', '🐨'
@@ -75,6 +77,11 @@ Page({
         this.setData({
           messages: res.result.data
         });
+        
+        // 等待DOM更新后滚动到底部
+        setTimeout(() => {
+          this.scrollToBottom();
+        }, 300);
       } else {
         wx.showToast({ title: res.result.message, icon: 'none' });
       }
@@ -83,6 +90,17 @@ Page({
       wx.showToast({ title: '加载失败', icon: 'none' });
     } finally {
       wx.hideLoading();
+    }
+  },
+
+  // 滚动到底部
+  scrollToBottom() {
+    const messageCount = this.data.messages.length;
+    if (messageCount > 0) {
+      const lastMessageId = this.data.messages[messageCount - 1].id;
+      this.setData({
+        scrollToView: `message-${lastMessageId}`
+      });
     }
   },
 
@@ -103,16 +121,45 @@ Page({
   },
 
   // 插入图片
-  handleImageInsert() {
-    wx.chooseImage({
-      count: 1,
-      sizeType: ['compressed'],
-      sourceType: ['album', 'camera'],
-      success: (res) => {
-        this.setData({
-          inputValue: this.data.inputValue + `[图片]`
-        });
-      }
+  async handleImageInsert() {
+    try {
+      // 选择图片
+      const res = await wx.chooseImage({
+        count: 1,
+        sizeType: ['compressed'],
+        sourceType: ['album', 'camera']
+      });
+
+      const tempFilePath = res.tempFilePaths[0];
+
+      // 显示上传提示
+      wx.showLoading({ title: '上传图片中...' });
+
+      // 上传图片到云存储
+      const uploadResult = await wx.cloud.uploadFile({
+        cloudPath: `message-images/${Date.now()}-${Math.random().toString(36).slice(-6)}.jpg`,
+        filePath: tempFilePath
+      });
+
+      // 保存云文件ID
+      this.setData({
+        selectedImage: uploadResult.fileID
+      });
+
+      wx.hideLoading();
+      wx.showToast({ title: '图片已选择', icon: 'success' });
+
+    } catch (err) {
+      console.error('选择或上传图片失败:', err);
+      wx.hideLoading();
+      wx.showToast({ title: '图片选择失败', icon: 'none' });
+    }
+  },
+
+  // 取消选择的图片
+  cancelSelectedImage() {
+    this.setData({
+      selectedImage: null
     });
   },
 
@@ -123,15 +170,33 @@ Page({
 
   // 发送消息 - 调用 addmessage 云函数
   async handleSend() {
-    const { inputValue, userAvatar, tempName } = this.data;
+    const { inputValue, userAvatar, tempName, selectedImage } = this.data;
     
-    if (!inputValue || !inputValue.trim()) {
-      wx.showToast({ title: '请输入内容', icon: 'none' });
+    // 检查是否有文本或图片
+    if ((!inputValue || !inputValue.trim()) && !selectedImage) {
+      wx.showToast({ title: '请输入内容或选择图片', icon: 'none' });
       return;
     }
 
     try {
       wx.showLoading({ title: '发送中...' });
+
+      // 构建消息内容
+      let messageContent = inputValue;
+      let messageType = 'text';
+      let messageImage = null;
+
+      // 如果有图片
+      if (selectedImage) {
+        messageType = 'image';
+        messageImage = selectedImage;
+        // 如果同时有文本和图片,都保存
+        if (inputValue && inputValue.trim()) {
+          messageContent = inputValue;
+        } else {
+          messageContent = '[图片]';
+        }
+      }
 
       // 调用 addmessage 云函数保存消息
       const res = await wx.cloud.callFunction({
@@ -139,7 +204,9 @@ Page({
         data: {
           avatar: userAvatar,
           name: tempName,
-          content: inputValue,
+          content: messageContent,
+          type: messageType,
+          image: messageImage,
           isOwn: true
         }
       });
@@ -150,15 +217,23 @@ Page({
           id: res.result.data.id,
           avatar: userAvatar,
           name: tempName,
-          content: inputValue,
+          content: messageContent,
+          type: messageType,
+          image: messageImage,
           time: res.result.data.time,
           isOwn: true
         };
 
         this.setData({
           messages: [...this.data.messages, newMessage],
-          inputValue: ''
+          inputValue: '',
+          selectedImage: null
         });
+
+        // 等待DOM更新后滚动到底部
+        setTimeout(() => {
+          this.scrollToBottom();
+        }, 100);
 
         wx.showToast({ title: '发送成功', icon: 'success' });
       } else {
@@ -169,6 +244,17 @@ Page({
       wx.showToast({ title: '发送失败，请重试', icon: 'none' });
     } finally {
       wx.hideLoading();
+    }
+  },
+
+  // 预览图片
+  previewImage(e) {
+    const src = e.currentTarget.dataset.src;
+    if (src) {
+      wx.previewImage({
+        urls: [src],
+        current: src
+      });
     }
   }
 });

@@ -192,6 +192,14 @@ page {
   font-size: 28rpx;
   line-height: 1.4;
   display: inline-block;
+  max-width: 100%;
+  min-width: 100rpx;
+}
+
+.bubble.has-image {
+  padding: 10rpx;
+  display: block;
+  width: 100%;
 }
 
 .self-bubble {
@@ -296,4 +304,69 @@ page {
 .emoji {
   font-size: 48rpx;
   padding: 10rpx;
+}
+
+/* ========== 图片消息样式 ========== */
+.message-image {
+  width: 100%;
+  max-width: 100%;
+  border-radius: 8rpx;
+  margin-top: 8rpx;
+  cursor: pointer;
+  display: block;
+}
+
+.image-text {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 26rpx;
+  color: #333;
+}
+
+/* ========== 已选择图片预览样式 ========== */
+.selected-image-preview {
+  background-color: #fff;
+  padding: 16rpx;
+  border-top: 1rpx solid #dcdcdc;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12rpx;
+  font-size: 26rpx;
+  color: #666;
+}
+
+.cancel-btn {
+  width: 48rpx !important;
+  height: 48rpx !important;
+  min-width: 48rpx !important;
+  min-height: 48rpx !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  font-size: 40rpx !important;
+  color: #999 !important;
+  line-height: 1 !important;
+}
+
+.cancel-btn::after {
+  border: none !important;
+  display: none !important;
+}
+
+.preview-image {
+  max-width: 100%;
+  border-radius: 8rpx;
+  margin-top: 8rpx;
 }

@@ -10,7 +10,7 @@ const db = cloud.database();
 // 云函数入口函数
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext();
-  const { avatar, name, content, isOwn } = event;
+  const { avatar, name, content, type, image, isOwn } = event;
 
   // 参数验证
   if (!content || !content.trim()) {
@@ -38,6 +38,8 @@ exports.main = async (event, context) => {
       avatar: avatar,
       name: name,
       content: content.trim(),
+      type: type || 'text', // text 或 image
+      image: image || null, // 图片的云存储ID
       time: timeString,
       date: dateString,
       timestamp: now.getTime(),

@@ -27,6 +27,8 @@ exports.main = async (event, context) => {
       avatar: item.avatar,
       name: item.name,
       content: item.content,
+      type: item.type || 'text',
+      image: item.image || null,
       time: item.time,
       date: item.date,
       timestamp: item.timestamp,
