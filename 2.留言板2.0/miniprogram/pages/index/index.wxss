@@ -1,0 +1,299 @@
+page {
+  height: 100%;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  background-color: #ededed;
+  box-sizing: border-box;
+}
+
+/* ========== 授权页面样式 ========== */
+.auth-container {
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  padding: 40rpx 20rpx;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.auth-card {
+  background-color: #fff;
+  padding: 40rpx 20rpx;
+  border-radius: 16rpx;
+  width: 100%;
+  max-width: 500rpx;
+  box-shadow: 0 4rpx 20rpx rgba(0,0,0,0.1);
+  box-sizing: border-box;
+}
+
+.auth-title {
+  font-size: 80rpx;
+  text-align: center;
+  margin-bottom: 16rpx;
+  line-height: 1.2;
+}
+
+.auth-subtitle {
+  font-size: 32rpx;
+  text-align: center;
+  margin-bottom: 10rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.auth-desc {
+  font-size: 26rpx;
+  color: #888;
+  text-align: center;
+  margin-bottom: 24rpx;
+  line-height: 1.5;
+}
+
+.avatar-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  justify-content: center;
+  margin-bottom: 24rpx;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.avatar-item {
+  width: 70rpx;
+  height: 70rpx;
+  border-radius: 12rpx;
+  border: 3rpx solid #ccc;
+  font-size: 36rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5f5f5;
+  flex-shrink: 0;
+}
+
+.avatar-item.active {
+  border-color: #07c160;
+  background-color: #e6f9e7;
+  transform: scale(1.05);
+}
+
+.input {
+  width: 100%;
+  height: 80rpx;
+  padding: 0 20rpx;
+  border-radius: 8rpx;
+  border: 2rpx solid #ccc;
+  margin-bottom: 20rpx;
+  box-sizing: border-box;
+  font-size: 28rpx;
+  background-color: #f9f9f9;
+}
+
+.input:focus {
+  border-color: #07c160;
+  background-color: #fff;
+}
+
+.btn {
+  width: 100%;
+  height: 88rpx;
+  background-color: #07c160;
+  color: #fff;
+  border-radius: 8rpx;
+  font-size: 30rpx;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  padding: 0;
+  margin: 0;
+  line-height: normal;
+  box-sizing: border-box;
+}
+
+.btn[disabled] {
+  background-color: #ccc;
+}
+
+.btn::after {
+  border: none;
+  display: none;
+}
+
+/* ========== 聊天页面样式 ========== */
+.chat-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.message-list {
+  flex: 1;
+  padding: 20rpx;
+  overflow-y: auto;
+  box-sizing: border-box;
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
+}
+
+.message-item {
+  display: flex;
+  gap: 16rpx;
+  margin-bottom: 24rpx;
+  width: 100%;
+}
+
+.message-item.self {
+  flex-direction: row-reverse;
+}
+
+.avatar {
+  width: 64rpx;
+  height: 64rpx;
+  background-color: #ddd;
+  border-radius: 12rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 32rpx;
+  flex-shrink: 0;
+}
+
+.content {
+  max-width: calc(100% - 80rpx);
+  display: flex;
+  flex-direction: column;
+}
+
+.name {
+  font-size: 24rpx;
+  color: #666;
+  margin-bottom: 6rpx;
+}
+
+.bubble {
+  padding: 14rpx 20rpx;
+  border-radius: 16rpx;
+  word-break: break-all;
+  font-size: 28rpx;
+  line-height: 1.4;
+  display: inline-block;
+}
+
+.self-bubble {
+  background-color: #95ec69;
+  color: #000;
+}
+
+.bubble:not(.self-bubble) {
+  background-color: #fff;
+  color: #000;
+}
+
+.time {
+  font-size: 20rpx;
+  color: #aaa;
+  margin-top: 6rpx;
+}
+
+/* ========== 输入区域 - 删除发送按钮 ========== */
+.input-bar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 12rpx 16rpx calc(12rpx + env(safe-area-inset-bottom)) 16rpx;
+  border-top: 1rpx solid #dcdcdc;
+  background-color: #f7f7f7;
+  width: 100%;
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.input-bar-left {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 96rpx;
+  flex-shrink: 0;
+}
+
+/* 图标按钮 - 彻底移除边线 */
+.icon-btn {
+  width: 48rpx !important;
+  height: 48rpx !important;
+  min-width: 48rpx !important;
+  min-height: 48rpx !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.icon-btn::after {
+  border: none !important;
+  display: none !important;
+}
+
+.icon {
+  font-size: 40rpx;
+  line-height: 1;
+  color: #7f8389;
+}
+
+.icon-plus {
+  font-size: 44rpx;
+  font-weight: 300;
+}
+
+/* 输入框 - 撑满剩余空间 */
+.chat-input {
+  flex: 1;
+  min-width: 0;
+  height: 60rpx;
+  border: 1rpx solid #dcdcdc;
+  border-radius: 6rpx;
+  padding: 0 20rpx;
+  margin: 0 16rpx;
+  background-color: #ffffff;
+  font-size: 28rpx;
+  box-sizing: border-box;
+  width: auto;
+}
+
+/* ========== 表情面板 - 添加安全区域 ========== */
+.emoji-panel {
+  background-color: #fff;
+  padding: 20rpx 20rpx calc(20rpx + env(safe-area-inset-bottom)) 20rpx;
+  border-top: 1rpx solid #dcdcdc;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  height: 300rpx;
+  overflow-y: auto;
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.emoji {
+  font-size: 48rpx;
+  padding: 10rpx;
+}

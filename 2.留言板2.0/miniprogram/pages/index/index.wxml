@@ -1,0 +1,102 @@
+<view class="container">
+  <!-- 未授权 -->
+  <view wx:if="{{!isAuthorized}}" class="auth-container">
+    <view class="auth-card">
+      <view class="auth-title">💬</view>
+      <view class="auth-subtitle">欢迎来到留言板</view>
+      <view class="auth-desc">请先完成授权以查看和发送留言</view>
+
+      <!-- 头像选择 -->
+      <view class="avatar-grid">
+        <block wx:for="{{availableAvatars}}" wx:key="index">
+          <view 
+            class="avatar-item {{userAvatar===item?'active':''}}"
+            data-avatar="{{item}}"
+            bindtap="handleAvatarSelect"
+          >
+            {{item}}
+          </view>
+        </block>
+      </view>
+
+      <!-- 输入昵称 -->
+      <input 
+        class="input"
+        placeholder="请输入您的昵称"
+        value="{{tempName}}"
+        bindinput="onInputName"
+      />
+
+      <button 
+        class="btn"
+        bindtap="handleAuthorize"
+        disabled="{{!tempName}}"
+      >
+        进入留言板
+      </button>
+    </view>
+  </view>
+
+  <!-- 已授权 -->
+  <view wx:else class="chat-container">
+
+    <!-- 留言列表 -->
+    <scroll-view scroll-y class="message-list" scroll-into-view="{{scrollToView}}">
+      <block wx:for="{{messages}}" wx:key="id">
+        <view class="message-item {{item.isOwn?'self':''}}" id="message-{{item.id}}">
+          
+          <!-- 头像 -->
+          <view class="avatar">{{item.avatar}}</view>
+
+          <!-- 内容 -->
+          <view class="content">
+            <view class="name">{{item.name}}</view>
+            <view class="bubble {{item.isOwn?'self-bubble':''}}">
+              {{item.content}}
+            </view>
+            <view class="time">{{item.time}}</view>
+          </view>
+
+        </view>
+      </block>
+    </scroll-view>
+
+    <!-- 表情面板 -->
+    <view wx:if="{{showEmojiPicker}}" class="emoji-panel">
+      <block wx:for="{{emojis}}" wx:key="index">
+        <view 
+          class="emoji"
+          data-emoji="{{item}}"
+          bindtap="handleEmojiSelect"
+        >
+          {{item}}
+        </view>
+      </block>
+    </view>
+
+    <!-- 输入区 - 删除发送按钮 -->
+    <view class="input-bar">
+      <!-- 左侧按钮组 -->
+      <view class="input-bar-left">
+        <button class="icon-btn" bindtap="toggleEmoji">
+          <text class="icon">🙂</text>
+        </button>
+        <button class="icon-btn" bindtap="handleImageInsert">
+          <text class="icon icon-plus">＋</text>
+        </button>
+      </view>
+
+      <!-- 输入框 - 撑满剩余空间 -->
+      <input 
+        class="chat-input"
+        value="{{inputValue}}"
+        bindinput="onInput"
+        placeholder="说点什么..."
+        confirm-type="send"
+        bindconfirm="handleSend"
+        adjust-position="true"
+      />
+    </view>
+
+  </view>
+</view>
